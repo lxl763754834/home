@@ -1,29 +1,31 @@
 <template>
   <div class="content">
-    <div class="contentLeft" v-if="index==0" v-for="(item,index) in plans.planClean">
-      <div>
-        <span>{{item.Room}}</span>
-        <span>{{count}}</span>
-      </div>
-    </div>
-    <div class="contentRight">
-      <div class="rtop">
-        <select @change="getTime" v-model="select" name="selected">
-          <option value="0">0分钟</option>
-          <option value="30">30分钟</option>
-          <option value="60">60分</option>
-        </select>
-        <div class="count">
-          <div></div>
-          <span ref="degree">2</span>
-          <div></div>
+    <div class="wrap">
+      <div class="contentLeft" v-if="index==0" v-for="(item,index) in plans.planClean">
+        <div>
+          <span>{{item.Room}}</span>
+          <span>合计{{count}}分钟</span>
         </div>
       </div>
-      <ul class="choose">
-        <li v-for="(item,index) in plans.planClean[0].weekListTime" :key="index">
-          {{ item.value }}
-        </li>
-      </ul>
+      <div class="contentRight">
+        <div class="rtop">
+          <select @change="getTime" v-model="select" name="selected">
+            <option value="0">0分钟</option>
+            <option value="30">30分钟</option>
+            <option value="60">60分</option>
+          </select>
+          <div class="count">
+            <div @click="reduce">-</div>
+            <span ref="degree">{{degree}}</span>
+            <div @click="add">+</div>
+          </div>
+        </div>
+        <ul class="choose">
+          <li v-for="(item,index) in plans.planClean[0].weekListTime" :key="index">
+            {{ item.value }}
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="btns">
       <button>客户确认</button>
@@ -498,8 +500,22 @@
     },
     methods:{
       getTime(){
-//        console.log(this.select)
-      }
+
+      },
+      //次数减少
+      reduce(){
+        this.degree -= 1;
+        if(this.degree<=0){
+          this.degree = 0;
+        }
+      },
+      //次数增加
+      add(){
+        this.degree +=1;
+        if(this.degree>=9){
+          this.degree = 9;
+        }
+      },
     },
     computed:{
       count(){
@@ -515,9 +531,17 @@
   @width:100%;
   .content{
     width: @width;
+    height: 444px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #d9e6e4;
+    .wrap{
+      width: @width;
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+    }
   }
   .contentLeft{
     background:#bfbfbf;
@@ -552,7 +576,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-around;
     flex-wrap: wrap;
     .rtop{
       width: @width;
@@ -579,6 +602,8 @@
           width: 25px;
           height: 25px;
           background-color: rgba(201,237,187,0.56);
+          text-align: center;
+          line-height: 25px;
         }
         &>span{
           text-align: center;
@@ -610,6 +635,7 @@
       text-align:center;
       font-size: 10px;
       list-style: none;
+      background-color: #ffffff;
     }
   }
   .btns{
@@ -617,8 +643,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    bottom: 5px;
+    margin-bottom: 5px;
     &>button{
       background:#25bc65;
       box-shadow:0 2px 4px 0 rgba(4,113,51,0.67);

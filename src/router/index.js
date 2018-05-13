@@ -8,20 +8,27 @@ Vue.use(Router)
 
 let routes=[
   {
+    path:'/',
+    redirect:'/daily'
+  },
+  {
+    path:'/daily',
+    component: daily,
+    name:'daily'
+  },
+  {
     path:'/test',
     component: test
   },
   {
-    path:'/daily',
-    component: daily
-  },
-  {
     path:'/plans',
-    component: plans
+    component: plans,
+    name:'plans'
   },
   {
     path:'/other',
-    component: other
+    component: other,
+    name:'other'
   }
 ]
 export default new Router({

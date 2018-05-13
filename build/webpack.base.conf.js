@@ -68,6 +68,10 @@ module.exports = {
       },
       {
         test:/\.less$|\.css$/,
+        include:[
+          /src/,
+          '/node——modules/mint-ui/lib/'
+        ],
         loader: 'style-loader!css-loader',
       }
     ]

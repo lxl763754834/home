@@ -9,8 +9,11 @@ import axios from 'axios'
 Vue.prototype.$http = axios
 import 'lib-flexible/flexible.js'
 import Mint from 'mint-ui';
+import 'mint-ui/lib/style.css'
 Vue.use(Mint);
+import { TimePicker } from 'mint-ui';
 
+Vue.component(TimePicker, TimePicker);
 
 Vue.config.productionTip = false
 

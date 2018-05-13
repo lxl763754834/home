@@ -1,29 +1,31 @@
 <template>
   <div class="content">
+    <div class="wrap">
       <div class="contentLeft" v-for="(item) in housework.planAll">
-          <div>
-            <span>{{item.Room}}</span>
-            <span>{{count}}分钟</span>
-          </div>
-      </div>
-    <div class="contentRight">
-      <div class="rtop">
-        <select @change="getTime" v-model="select" name="selected">
-          <option value="0">0分钟</option>
-          <option value="30">30分钟</option>
-          <option value="60">60分</option>
-        </select>
-        <div class="count">
-          <div></div>
-          <span ref="degree">2</span>
-          <div></div>
+        <div>
+          <span>{{item.Room}}</span>
+          <span>合计{{count}}分钟</span>
         </div>
       </div>
-      <ul class="choose">
-        <li v-for="(item,index) in housework.planAll[0].weekListTime" :key="index">
-          {{ item.value }}
-        </li>
-      </ul>
+      <div class="contentRight">
+        <div class="rtop">
+          <select @change="getTime" v-model="select" name="selected">
+            <option value="0">0分钟</option>
+            <option value="30">30分钟</option>
+            <option value="60">60分</option>
+          </select>
+          <div class="count">
+            <div @click="reduce">-</div>
+            <span ref="degree">{{degree}}</span>
+            <div @click="add">+</div>
+          </div>
+        </div>
+        <ul class="choose">
+          <li v-for="(item,index) in housework.planAll[0].weekListTime" :key="index">
+            {{ item.value }}
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="btns">
       <button @click="affirm">客户确认</button>
@@ -93,6 +95,21 @@
       },
       methods:{
         getTime(){
+
+        },
+        //次数减少
+        reduce(){
+          this.degree -= 1;
+          if(this.degree<=0){
+            this.degree = 0;
+          }
+        },
+        //次数增加
+        add(){
+          this.degree +=1;
+          if(this.degree>=9){
+            this.degree = 9;
+          }
         },
         affirm(){
           alert('确认成功');
@@ -102,17 +119,13 @@
         }
       },
       computed:{
+        //总花费时间
         count(){
           let total = this.degree * this.select;
-//          console.log(total);
           this.$store.commit('getDaily',total);
           return total;
         }
       },
-      mounted(){
-        console.log(this.$store.state.daily);
-      }
-
     }
 </script>
 
@@ -120,9 +133,18 @@
   @width:100%;
 .content{
   width: @width;
+  height: 444px;
+  background-color: #d9e6e4;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+  .wrap{
+    width: @width;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
   .contentLeft{
     background:#bfbfbf;
@@ -182,6 +204,8 @@
           width: 25px;
           height: 25px;
           background-color: rgba(201,237,187,0.56);
+          text-align: center;
+          line-height: 25px;
         }
         &>span{
           text-align: center;
@@ -213,6 +237,7 @@
       text-align:center;
       font-size: 10px;
       list-style: none;
+      background-color: #ffffff;
      }
   }
   .btns{
@@ -220,8 +245,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    bottom: 5px;
+    margin-bottom: 5px;
     &>button{
       background:#25bc65;
       box-shadow:0 2px 4px 0 rgba(4,113,51,0.67);
